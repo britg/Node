@@ -48,9 +48,18 @@ function Move () {
 
 	if (Input.touchCount == 1) {
 		var delta : Vector2 = Input.GetTouch(0).deltaPosition * moveDamper;
-		transform.position += delta;
+		var newPos : Vector3 = transform.position + delta;
+		
+		
 	} else if (Input.touchCount == 0) {
 		
 	}
+
+}
+
+function CheckX () {
+}
+
+function CheckY () {
 
 }

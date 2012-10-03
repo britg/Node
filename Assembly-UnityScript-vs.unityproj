@@ -45,6 +45,8 @@
   </ItemGroup>
   <ItemGroup>
      <Compile Include="Assets\Scripts\ByteStream\StreamManager.js" />
+     <Compile Include="Assets\Scripts\ByteStream\SwipeManager.js" />
+     <Compile Include="Assets\Scripts\ByteStream\Tile.js" />
      <Compile Include="Assets\Scripts\Level\PinchZoomMove.js" />
      <Compile Include="Assets\Scripts\Utilities\FPS.js" />
      <Compile Include="Assets\Scripts\Utilities\Passthrough.js" />

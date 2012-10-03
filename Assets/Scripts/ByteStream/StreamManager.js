@@ -13,6 +13,8 @@ private var byteZ : float = -0.001;
 var checkTime : float = 0.1;
 private var currentCheckTime : float = 0.0;
 
+private var shouldFall : boolean = true;
+
 function Start () {
 	width = transform.renderer.bounds.size.x;
 	byteWidth = width / cols;
@@ -20,7 +22,10 @@ function Start () {
 }
 
 function Update () {
-	Fall();
+
+	if (shouldFall) {
+		Fall();
+	}
 	
 	currentCheckTime += Time.deltaTime;
 	if (currentCheckTime >= checkTime) {
@@ -77,4 +82,20 @@ function RemoveRows () {
 			GameObject.Destroy(b);
 		}
 	}
+}
+
+function Convert (tiles : Array) {
+	Debug.Log("Convert " + tiles);
+	
+	for (var tile : Tile in tiles) {
+		GameObject.Destroy(tile.gameObject);
+	}
+}
+
+function Hold () {
+	shouldFall = false;
+}
+
+function Release () {
+	shouldFall = true;
 }

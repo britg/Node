@@ -5,6 +5,8 @@ var bytes : GameObject[];
 var cols : float = 7.0;
 var startY : float = 6.51;
 var fallRate : float = 1.0;
+private var fallInterval : float;
+private var currentFallTime : float = 0.0;
 
 private var width : float;
 private var byteWidth : float;
@@ -24,16 +26,22 @@ function Start () {
 function Update () {
 
 	if (shouldFall) {
+		CalcFallInterval();
 		Fall();
+		
+		currentFallTime += Time.deltaTime;
+		if (currentFallTime >= fallInterval) {
+			FillNewRow();
+			RemoveRows();
+			currentFallTime = 0.0;
+		}
 	}
 	
-	currentCheckTime += Time.deltaTime;
-	if (currentCheckTime >= checkTime) {
-		FillNewRow();
-		RemoveRows();
-		currentCheckTime = 0.0;
-	}
 	
+}
+
+function CalcFallInterval () {
+	fallInterval = byteWidth / fallRate;
 }
 
 function DrawRow (y : float) {

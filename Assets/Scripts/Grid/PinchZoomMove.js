@@ -1,7 +1,7 @@
 #pragma strict
 
-var minZ : float = 1.0;
-var maxZ : float = 50.0;
+var minZ : float = -38.1;
+var maxZ : float = -6;
 var zoomDamper : float = 0.1;
 var moveDamper : float = 0.01;
 var momentumDamper : float = 10.0;
@@ -52,9 +52,11 @@ function PinchZoom () {
 	    distance = Vector2.Distance(touch0, touch1);
 	    
 	    if (startDistance > 0.0) {
-			var perc = distance / startDistance;
-		    var z : float = (transform.position.z + ((maxZ - minZ) * (1.0 - perc) * zoomDamper));
-		    transform.position.z = Mathf.Clamp(z, minZ, maxZ);
+			var perc : float = distance / startDistance;
+			var delta : float = startDistance - distance;
+		    var z : float = (gridCamera.transform.position.z - (delta * zoomDamper));
+			Debug.Log("Delta is " + delta + " damper: " + delta * zoomDamper + " new z is " + z);
+		    gridCamera.transform.position.z = Mathf.Clamp(z, minZ, maxZ);
 		}
 	    
 	    startDistance = distance;

@@ -7,6 +7,8 @@ private var lastTile : Tile;
 private var swipeLineRenderer : LineRenderer;
 private var streamManager : StreamManager;
 
+private var wasSwiping : boolean = false;
+
 function Start () {
 	var swipeLine : GameObject = GameObject.Find("SwipeLine");
 	swipeLineRenderer = swipeLine.GetComponent("LineRenderer");
@@ -35,26 +37,28 @@ function DetectInput () {
 	}
 	
 	if (swiping) {
+		wasSwiping = true;
 		DetectHotspot(inputPosition);
-		streamManager.Hold();
 	} else {
-		streamManager.Release();
         if (tileCount >= 3) {
             CommitSwipe();
         } else if (tileCount > 0) {
         	CancelSwipe();
         }
+        
+        if (wasSwiping) {
+        	wasSwiping = false;
+			streamManager.Resume();
+        }
 	}
 }
 
 function DetectHotspot (pos : Vector3) {
-	Debug.Log("pos is " + pos);
 	var p : Vector3 = Camera.main.ScreenToWorldPoint(Vector3(pos.x, pos.y, 10));
 	var hit : RaycastHit;
 	var tileObject : GameObject;
 	
 	//if (Physics.Raycast (ray, hit, 10)) {
-	Debug.Log("point is " + p);
 	if (Physics.Raycast(Vector3(p.x, p.y, -10), Vector3(0, 0, 1), hit, 10)) {
 		//Debug.Log("Hit is " + hit);
 		tileObject = hit.transform.gameObject; 
@@ -64,14 +68,14 @@ function DetectHotspot (pos : Vector3) {
 
 function ValidateTileInSwipe (tileObject : GameObject) {
 	var tile : Tile = tileObject.GetComponent("Tile");
-	Debug.Log("Tile is " + tile);
 	
 	if (!tile)
 		return;
+		
+	streamManager.Pause();
 	
 	if (tileCount == 0) {
 		workingTileType = tile.type;
-		Debug.Log("working tile type " + workingTileType);
 	}
 	
 	if (!CloseEnough(tile)) {
@@ -85,7 +89,6 @@ function ValidateTileInSwipe (tileObject : GameObject) {
 	
 	
 	if (tile.type == workingTileType) {
-		Debug.Log("Adding Tile to swipe " + tileCount);
 		AddTileToSwipe(tile);
 	}
 }

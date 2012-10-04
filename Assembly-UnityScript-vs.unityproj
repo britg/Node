@@ -18,7 +18,7 @@
 	<DebugType>full</DebugType>
 	<Optimize>false</Optimize>
 	<OutputPath>Temp\bin\Debug\</OutputPath>
-	<DefineConstants>DEBUG;TRACE;UNITY_IPHONE;UNITY_IPHONE_API;ENABLE_MICROPHONE;ENABLE_IMAGEEFFECTS;ENABLE_WEBCAM;ENABLE_AUDIO_FMOD;ENABLE_NETWORK;ENABLE_MONO;ENABLE_PHYSICS;ENABLE_TERRAIN;ENABLE_CACHING;ENABLE_GENERICS;ENABLE_CLOTH;UNITY_IOS;ENABLE_AUDIO;ENABLE_WWW;ENABLE_SHADOWS;UNITY_4_0_0;UNITY_4_0;DEVELOPMENT_BUILD;ENABLE_PROFILER;UNITY_EDITOR</DefineConstants>
+	<DefineConstants>DEBUG;TRACE;UNITY_IPHONE;UNITY_IPHONE_API;ENABLE_MICROPHONE;ENABLE_IMAGEEFFECTS;ENABLE_WEBCAM;ENABLE_AUDIO_FMOD;ENABLE_NETWORK;ENABLE_MONO;ENABLE_PHYSICS;ENABLE_TERRAIN;ENABLE_CACHING;ENABLE_GENERICS;ENABLE_CLOTH;UNITY_IOS;ENABLE_AUDIO;ENABLE_WWW;ENABLE_SHADOWS;UNITY_4_0_0;UNITY_4_0;ENABLE_PROFILER;UNITY_EDITOR</DefineConstants>
 	<ErrorReport>prompt</ErrorReport>
 	<WarningLevel>4</WarningLevel>
 	<NoWarn>0169</NoWarn>
@@ -44,10 +44,12 @@
 	</Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\Scripts\ByteStream\SpeedControl.js" />
      <Compile Include="Assets\Scripts\ByteStream\StreamManager.js" />
      <Compile Include="Assets\Scripts\ByteStream\SwipeManager.js" />
      <Compile Include="Assets\Scripts\ByteStream\Tile.js" />
-     <Compile Include="Assets\Scripts\Level\PinchZoomMove.js" />
+     <Compile Include="Assets\Scripts\Grid\PinchZoomMove.js" />
+     <Compile Include="Assets\Scripts\Level\NodeManager.js" />
      <Compile Include="Assets\Scripts\Utilities\FPS.js" />
      <Compile Include="Assets\Scripts\Utilities\Passthrough.js" />
      <Compile Include="Assets\Scripts\Utilities\TargetFramerate.js" />

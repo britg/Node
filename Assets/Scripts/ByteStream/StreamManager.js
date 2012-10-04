@@ -12,15 +12,27 @@ private var width : float;
 private var byteWidth : float;
 private var byteZ : float = -0.001;
 
-var checkTime : float = 0.1;
-private var currentCheckTime : float = 0.0;
+private var shouldFall : boolean = false;
+private var shouldBlink : boolean = true;
+private var blinkTime : float = 0.4;
+private var currentBlinkTime : float = 0.0;
 
-private var shouldFall : boolean = true;
+var initializingText : GUIText;
+var initializeDelay : float = 3.0;
 
 function Start () {
 	width = transform.renderer.bounds.size.x;
 	byteWidth = width / cols;
 	
+	Pause();
+	
+	InitializeStream();
+}
+
+function InitializeStream () {
+	yield WaitForSeconds(initializeDelay);
+	shouldBlink = false;
+	Resume();
 }
 
 function Update () {
@@ -31,13 +43,28 @@ function Update () {
 		
 		currentFallTime += Time.deltaTime;
 		if (currentFallTime >= fallInterval) {
-			FillNewRow();
+			AddRow();
 			RemoveRows();
 			currentFallTime = 0.0;
 		}
 	}
 	
+	if (shouldBlink) {
 	
+		currentBlinkTime += Time.deltaTime;
+		if (currentBlinkTime > blinkTime) {
+			ToggleInitializingText();
+			currentBlinkTime = 0.0;
+		}
+	
+	} else {
+		initializingText.enabled = false;
+	}
+	
+}
+
+function ToggleInitializingText () {
+	initializingText.enabled = !initializingText.enabled;
 }
 
 function CalcFallInterval () {
@@ -69,16 +96,13 @@ function Fall () {
 	}
 }
 
-function FillNewRow () {
+function AddRow () {
 
 	var ray : Ray;
 	var x : float = byteWidth/2;
 	var y : float = startY - byteWidth/2;
 	
-	if (!Physics.Raycast(Vector3(x, y, -10), Vector3(0, 0, 1), 10)) {
-		Debug.Log("Drawing new row");
-		DrawRow(startY);
-	}
+	DrawRow(startY);
 
 }
 
@@ -100,10 +124,10 @@ function Convert (tiles : Array) {
 	}
 }
 
-function Hold () {
+function Pause () {
 	shouldFall = false;
 }
 
-function Release () {
+function Resume() {
 	shouldFall = true;
 }

@@ -1,7 +1,7 @@
 #pragma strict
 
-var minZ : float = -38.1;
-var maxZ : float = -6;
+var minZ : float = -50;
+var maxZ : float = -15.2;
 var zoomDamper : float = 0.1;
 var moveDamper : float = 0.01;
 var momentumDamper : float = 10.0;
@@ -81,8 +81,11 @@ function Move () {
 	var worldPos : Vector3;
 
 	if (Input.touchCount == 1) {
-		inputPosition = Input.GetTouch(0).position;
-		moving = true;
+		var touch : Touch = Input.GetTouch(0);
+		if (touch.phase != TouchPhase.Ended) {
+			inputPosition = touch.position;
+			moving = true;
+		}
 	}
 	
 	if (Input.GetMouseButton(0)) {
@@ -105,14 +108,11 @@ function Move () {
 
 function TestMove (p : Vector3) {
 
-	Debug.Log("Testing move at " + p);
-
 	var hit : RaycastHit;
 	
 	//if (Physics.Raycast (ray, hit, 10)) {
 	if (Physics.Raycast(Vector3(p.x, p.y, -10), Vector3(0, 0, 1), hit, 20)) {
 		var hitOn : GameObject = hit.transform.gameObject;
-		Debug.Log("Hit on " + hitOn);
 		if (hitOn.tag == "GridTexture") {
 			delta = p - lastPos;
 			var newPos : Vector3 = gridCamera.transform.position - (delta * moveDamper);

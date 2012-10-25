@@ -12,32 +12,29 @@ private var width : float;
 private var byteWidth : float;
 private var byteZ : float = -0.001;
 
+private var started : boolean = false;
 private var shouldFall : boolean = false;
 private var shouldBlink : boolean = true;
 private var blinkTime : float = 0.4;
 private var currentBlinkTime : float = 0.0;
 
 var initializingText : GUIText;
+var selectText : GUIText;
 var initializeDelay : float = 3.0;
+
+private var selectedNode : Node;
+var idCard : GameObject;
+
+var swipeManager : SwipeManager;
 
 function Start () {
 	width = transform.renderer.bounds.size.x;
 	byteWidth = width / cols;
-	
-	Pause();
-	
-	InitializeStream();
-}
-
-function InitializeStream () {
-	yield WaitForSeconds(initializeDelay);
-	shouldBlink = false;
-	Resume();
 }
 
 function Update () {
 
-	if (shouldFall) {
+	if (started && shouldFall) {
 		CalcFallInterval();
 		Fall();
 		
@@ -116,6 +113,14 @@ function RemoveRows () {
 	}
 }
 
+function ClearStream () {
+	var inPlay : Array = GameObject.FindGameObjectsWithTag("Byte");
+	
+	for (var b : GameObject in inPlay) {
+		GameObject.Destroy(b);
+	}
+}
+
 function Convert (tiles : Array) {
 	Debug.Log("Convert " + tiles);
 	
@@ -124,10 +129,42 @@ function Convert (tiles : Array) {
 	}
 }
 
+function SelectNode (node : Node) {
+	Stop();
+	selectedNode = node;
+	selectText.active = false;
+	idCard.SetActive(true);
+}
+
+function Begin () {
+	started = true;
+	InitializeStream();
+}
+
+function Stop () {
+	started = false;
+	shouldFall = false;
+	swipeManager.enabled = false;
+	ClearStream();
+}
+
 function Pause () {
 	shouldFall = false;
 }
 
 function Resume() {
-	shouldFall = true;
+	if (started) {
+		shouldFall = true;
+		swipeManager.enabled = true;
+	}
+}
+
+function InitializeStream () {
+	idCard.SetActive(false);
+	shouldBlink = true;
+	initializingText.active = true;
+	yield WaitForSeconds(initializeDelay);
+	shouldBlink = false;
+	initializingText.active = false;
+	Resume();
 }
